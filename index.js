@@ -77,6 +77,7 @@ const gitTag = () => {
 
 const gitAddAndCommit = () => {
 
+    const message = program.message || packageJson.name + ' align ' + version;
     if (!program.dryRun) {
         if (!program.silent) {
             console.log('Git add ..')
@@ -91,7 +92,7 @@ const gitAddAndCommit = () => {
                 console.log(`stderr: ${stderr}`);
             }
 
-            const message = program.message || 'npmtag align ' + version;
+
             if (!program.silent) {
                 console.log('Git commit "' + message + '" ..')
             }
@@ -108,7 +109,6 @@ const gitAddAndCommit = () => {
     } else {
         if (!program.silent) {
             console.log('Git add ..')
-            const message = program.message || 'npmtag align ' + version;
             console.log('Git commit "' + message + '" ..')
         }
         gitTag();
