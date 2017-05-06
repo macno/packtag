@@ -1,6 +1,6 @@
 # packtag
 
-__Packtag__ is a simple package the helps you to keep aligned _package.json_ version key with git tag.  
+__Packtag__ helps you keeping _package.json_ version aligned with git tags.  
 
 It works in 2 different ways:   
 if __-x__ option is used, it checks the _package.json_ version, if it is aligned, then it just executes `git tag`. If the version mismatach, it updates it, commits it to git and then execute `git tag`
