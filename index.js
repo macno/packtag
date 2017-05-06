@@ -11,7 +11,7 @@ const readline = require('readline');
 
 const exec = require('child_process').exec;
 
-const npmtagPackageJson = require(path.resolve(__dirname, 'package.json'));
+const packtagPackageJson = require(path.resolve(__dirname, 'package.json'));
 
 const program = require('commander');
 
@@ -21,7 +21,7 @@ var version;
 var packageJson;
 
 program
-    .version(npmtagPackageJson.version)
+    .version(packtagPackageJson.version)
     .option('--dry-run', true)
     .option('-s, --silent', true)
     .option('-f, --force', true)
@@ -77,7 +77,7 @@ const gitTag = () => {
 
 const gitAddAndCommit = () => {
 
-    const message = program.message || packageJson.name + ' align ' + version;
+    const message = program.message || packtagPackageJson.name + ' align ' + version;
     if (!program.dryRun) {
         if (!program.silent) {
             console.log('Git add ..')
