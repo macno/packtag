@@ -1,6 +1,6 @@
 {
    "name": "packtag",
-   "version": "1.0.2",
+   "version": "1.0.3",
    "description": "Packtag helps you keeping package.json version aligned with git tags",
    "main": "index.js",
    "author": "Michele (macno) Azzolari",
