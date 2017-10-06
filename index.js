@@ -22,20 +22,26 @@ var packageJson;
 
 program
     .version(packtagPackageJson.version)
+    .option('-b, --bump', true)
     .option('--dry-run', true)
-    .option('-s, --silent', true)
     .option('-f, --force', true)
     .option('-k, --skip-tag', true)
-    .option('-x, --set-version <version>', 'will bump to a specific version and ignore other flags')
-    .option('-b, --bump', true)
-    .option('-t, --type <type>', 'what to bump: major, premajor, minor, preminor, patch, prepatch, or prerelease')
+    .option('-i, --identifier <identifier>', 'prerelease identifier')
     .option('-m, --message <message>', 'Optional commit message')
+    .option('-s, --silent', true)
+    .option('-t, --type <type>', 'what to bump: major, premajor, minor, preminor, patch, prepatch or prerelease')
+    .option('--verbose', true)
+    .option('-v, --version', 'Packtag version')
+    .option('-x, --set-version <version>', 'will bump to a specific version and ignore other flags')
+
     .parse(process.argv);
 
 if (!program.bump && !program.setVersion) {
     program.outputHelp();
     process.exit();
 }
+
+const verbose = program.silent ? false : program.verbose
 
 const updatePackageVersion = () => {
     if (!program.silent) {
@@ -59,7 +65,7 @@ const gitTag = () => {
     if(program.skipTag) {
         return;
     }
-    if (!program.silent) {
+    if (verbose) {
         console.log('Git tag ..')
     }
     if (!program.dryRun) {
@@ -79,7 +85,7 @@ const gitAddAndCommit = () => {
 
     const message = program.message || packtagPackageJson.name + ' align ' + version;
     if (!program.dryRun) {
-        if (!program.silent) {
+        if (verbose) {
             console.log('Git add ..')
         }
         exec('git add package.json', (error, stdout, stderr) => {
@@ -93,7 +99,7 @@ const gitAddAndCommit = () => {
             }
 
 
-            if (!program.silent) {
+            if (verbose) {
                 console.log('Git commit "' + message + '" ..')
             }
             exec('git commit -m "' + message + '"', (error, stdout, stderr) => {
@@ -107,7 +113,7 @@ const gitAddAndCommit = () => {
             })
         })
     } else {
-        if (!program.silent) {
+        if (verbose) {
             console.log('Git add ..')
             console.log('Git commit "' + message + '" ..')
         }
@@ -166,7 +172,8 @@ const run = () => {
             program.outputHelp();
             process.exit();
         }
-        version = semver.inc(packageJson.version, program.type);
+        const identifier = program.identifier || ''
+        version = semver.inc(packageJson.version, program.type, identifier);
         updatePackageVersion(gitTag);
     } else if (program.version) {
         version = program.setVersion;
