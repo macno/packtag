@@ -75,8 +75,10 @@ const gitTag = () => {
                 console.error(`exec error: ${error}`);
                 process.exit(20);
             }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
+            if(verbose) {
+                console.log(`stdout: ${stdout}`);
+                console.log(`stderr: ${stderr}`);
+            }
         })
     }
 }
@@ -93,7 +95,7 @@ const gitAddAndCommit = () => {
                 console.error(`exec error: ${error}`);
                 process.exit(20);
             }
-            if(!program.silent) {
+            if(verbose) {
                 console.log(`stdout: ${stdout}`);
                 console.log(`stderr: ${stderr}`);
             }
@@ -107,8 +109,10 @@ const gitAddAndCommit = () => {
                     console.error(`exec error: ${error}`);
                     process.exit(21);
                 }
-                console.log(`stdout: ${stdout}`);
-                console.log(`stderr: ${stderr}`);
+                if(verbose) {
+                    console.log(`stdout: ${stdout}`);
+                    console.log(`stderr: ${stderr}`);
+                }
                 gitTag();
             })
         })
@@ -145,7 +149,7 @@ const setVersion = () => {
             process.exit(5)
         }
         if (program.force) {
-            if (!program.silent) {
+            if (verbose) {
                 console.log('Package version mismatch: %s vs %s, aligning force', packageJson.version, version)
             }
             updatePackageVersion();
@@ -180,7 +184,7 @@ const run = () => {
 
         if (!semver.valid(version)) {
             if (!program.silent) {
-                console.log('Invalid semver "%s"', version)
+                console.error('Invalid semver "%s"', version)
             }
             process.exit(1);
         }
